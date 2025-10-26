@@ -1,0 +1,9 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+supabase==2.0.2
+python-multipart==0.0.6
+requests==2.31.0
+google-api-python-client==2.108.0
+google-auth==2.23.4
+cryptography==41.0.7
+slowapi==0.1.9

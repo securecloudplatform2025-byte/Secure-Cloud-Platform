@@ -856,4 +856,4 @@ if __name__ == "__main__":
     if ssl_keyfile and ssl_certfile:
         uvicorn.run(app, host="0.0.0.0", port=10000, ssl_keyfile=ssl_keyfile, ssl_certfile=ssl_certfile)
     else:
-        uvicorn.run(app, host="0.0.0.0", port=8000)
+        uvicorn.run(app, host="0.0.0.0", port=10000)

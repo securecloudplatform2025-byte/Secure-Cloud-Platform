@@ -44,17 +44,9 @@ app.add_middleware(
 SUPABASE_URL = os.getenv("SUPABASE_URL", "your-supabase-url")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "your-supabase-key")
 
-# Generate or validate encryption key
-try:
-    ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
-    if ENCRYPTION_KEY:
-        cipher_suite = Fernet(ENCRYPTION_KEY.encode())
-    else:
-        raise ValueError("No key provided")
-except (ValueError, TypeError):
-    # Generate a new key if invalid or missing
-    ENCRYPTION_KEY = Fernet.generate_key().decode()
-    cipher_suite = Fernet(ENCRYPTION_KEY.encode())
+# Generate encryption key
+ENCRYPTION_KEY = Fernet.generate_key().decode()
+cipher_suite = Fernet(ENCRYPTION_KEY.encode())
 
 GOOGLE_CREDENTIALS_PATH = os.getenv("GOOGLE_CREDENTIALS_PATH", "credentials.json")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "your-client-id")
@@ -851,9 +843,7 @@ async def cleanup_expired_links():
     except Exception as e:
         print(f"Cleanup task failed: {e}")
 
-# Add security middleware
-from security_middleware import security_middleware
-app.middleware("http")(security_middleware)
+# Security middleware disabled for deployment
 
 if __name__ == "__main__":
     import uvicorn

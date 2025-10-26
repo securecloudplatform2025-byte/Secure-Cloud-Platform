@@ -44,21 +44,21 @@ app.add_middleware(
 SUPABASE_URL = os.getenv("SUPABASE_URL", "your-supabase-url")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "your-supabase-key")
 
-ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
-if not ENCRYPTION_KEY:
+# Generate or validate encryption key
+try:
+    ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
+    if ENCRYPTION_KEY:
+        cipher_suite = Fernet(ENCRYPTION_KEY.encode())
+    else:
+        raise ValueError("No key provided")
+except (ValueError, TypeError):
+    # Generate a new key if invalid or missing
     ENCRYPTION_KEY = Fernet.generate_key().decode()
-else:
-    # Validate the key format
-    try:
-        Fernet(ENCRYPTION_KEY.encode())
-    except ValueError:
-        ENCRYPTION_KEY = Fernet.generate_key().decode()
+    cipher_suite = Fernet(ENCRYPTION_KEY.encode())
+
 GOOGLE_CREDENTIALS_PATH = os.getenv("GOOGLE_CREDENTIALS_PATH", "credentials.json")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "your-client-id")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "your-client-secret")
-
-# Initialize encryption
-cipher_suite = Fernet(ENCRYPTION_KEY.encode())
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 security = HTTPBearer()
